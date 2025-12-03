@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-8v@7&c!m5i-=0&&b9qq*%6v1uu=fjh1y4g8vl-m--*@r=1j6+c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -112,6 +113,9 @@ USE_I18N = True
 USE_TZ = True
 
 
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
@@ -125,3 +129,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "myproject" / "static",
 ]
+
+
+
+
