@@ -1,0 +1,527 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CMM Auto Report Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #efe181;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 95%;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #ccc;
+        }
+
+        h2 {
+            margin: 0;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid gray;
+        }
+
+        .table-container {
+            margin-top: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        table th, table td {
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 8px;
+        }
+
+        .btn-section {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            background: #0a6efd;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #004ad4;
+        }
+
+        /* Row coloring rules */
+        .row-green { background: #28a745 !important; color: white !important; }
+        .row-yellow { background: #ffc107 !important; color: black !important; }
+        .row-orange { background: #ffcc80 !important; color: black !important; }
+        .row-normal { background: white !important; color: black !important; }
+
+        /* Selected row (on click) */
+        .row-selected { background: #0d6efd !important; color: white !important; }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div style="text-align:center; margin-bottom:10px;">
+        <img src="{% static 'images/img.png' %}"
+             alt="Dana Logo"
+             style="width:120px; height:auto;">
+    </div>
+    <h2>DANA ANAND INDIA PRIVATE LIMITED, JODALLI</h2>
+    <button id="exitBtn" class="btn" style="background:#dc3545; float:right;">
+        EXIT
+    </button>
+
+    <div class="header">
+        <div>Application: CMM Auto Report</div>
+        <div>Time: <span id="time"></span> | Date: <span id="date"></span></div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" id="actionField" />
+
+        <div class="form-grid">
+
+            <div>
+                <label>LINE</label>
+                <select name="line">
+                    <option>1410 SY</option>
+                    <option>909 SY</option>
+                    <option>ARGENTINA</option>
+                    <option>DIFF CASE</option>
+                    <option>DTA CF</option>
+                    <option>DTA SY</option>
+                    <option>END YOKE</option>
+                    <option>HDEY</option>
+                    <option>JAGUAR</option>
+                    <option>MERCEDES FY</option>
+                    <option>NISSAN/HINO</option>
+                    <option>SLEEVE MUFF</option>
+                    <option>TOYOTA FREY</option>
+                    <option>TUBE SHAFT</option>
+                    <option>TUBE YOKE</option>
+                    <option>TUNDRA FY</option>
+                    <option>TUNDRA SY</option>
+                    <option>UJ</option>
+                    <option>WATERFALL</option>
+                    <option>YOKE SHAFT</option>
+                    <option>YOKE SLEEVE</option>
+                </select>
+            </div>
+
+            <div>
+                <label>MACHINE</label>
+                <select name="machine">
+                    <option>CIN-1</option>
+                    <option>CIN-2</option>
+                    <option>MICROMATIC</option>
+                    <option>BOCCA-1</option>
+                    <option>BOCCA-2</option>
+                    <option>GCL 140</option>
+                    <option>SMT</option>
+                    <option>STD-3</option>
+                    <option>HPS</option>
+                    <option>ACE & JYOTHI</option>
+                    <option>J&J 36</option>
+                    <option>50TON</option>
+                    <option>JYOTI</option>
+                    <option>MAZAK</option>
+                    <option>J&J 66</option>
+                    <option>ACE</option>
+                    <option>MAZAK-1</option>
+                    <option>MAZAK-2</option>
+                    <option>MAZAK-3</option>
+                    <option>MAZAK-4</option>
+                    <option>MICROTECH</option>
+                    <option>ACE-2</option>
+                    <option>AMS HALL</option>
+                    <option>ODIN</option>
+                    <option>BEMCO</option>
+                    <option>BFW-1</option>
+                    <option>BFW-2</option>
+                    <option>BFW-3</option>
+                    <option>BFW-4</option>
+                    <option>ACE & AMS</option>
+                    <option>AMS VMC</option>
+                    <option>STD-1</option>
+                    <option>FY BFW</option>
+                    <option>TY BFW</option>
+                    <option>OLD BFW</option>
+                    <option>J&J 105</option>
+                    <option>J&J 73</option>
+                    <option>J&J 62</option>
+                    <option>J&J 63</option>
+                    <option>J&J 43</option>
+                    <option>J&J 55</option>
+                    <option>J&J 53</option>
+                    <option>PNR</option>
+                    <option>J&J 56</option>
+                    <option>AMS</option>
+                    <option>CLASSIC 1</option>
+                    <option>CLASSIC 2</option>
+                    <option>TOYOTA CLASSIC</option>
+                    <option>BFW</option>
+                    <option>J&J 57</option>
+
+                    <!-- Additional Machines from second list -->
+                    <option>12 TON</option>
+                    <option>J&J 72</option>
+                    <option>GROB-1</option>
+                    <option>GROB-2</option>
+                    <option>GROB-3</option>
+                    <option>AMS-1</option>
+                    <option>AMS-2</option>
+                    <option>AMS-3</option>
+                    <option>MAKINO</option>
+                    <option>PUMA</option>
+                    <option>SURFACE BROACH</option>
+                    <option>CHURCHIL</option>
+                    <option>16TON</option>
+                    <option>BURKE-2</option>
+                    <option>TOYOTA GRINDING</option>
+                    <option>AMS-4</option>
+                    <option>ROBODRILL</option>
+                    <option>ACER</option>
+                    <option>VSB-1</option>
+                    <option>VSB-2</option>
+                    <option>VSB-3</option>
+                    <option>BURKE-1</option>
+                    <option>MORRISON</option>
+                    <option>CG-1</option>
+                    <option>CG-2</option>
+                    <option>CG-4</option>
+                    <option>LMW-1</option>
+                    <option>LMW-2</option>
+                    <option>ACE TURNING</option>
+                    <option>MAZAK 250</option>
+                    <option>MAZAK 150</option>
+                    <option>MAZAK 5 AXIS</option>
+                </select>
+            </div>
+
+            <div>
+                <label>PART NO</label>
+                <input name="part_no" type="text" placeholder="Enter Part No" />
+            </div>
+
+            <div>
+                <label>OPERATION</label>
+                <select name="operation">
+                    <option>TURNING</option>
+                    <option>BORING & GROOVING</option>
+                    <option>OD & ID TURNING</option>
+                    <option>OD & FACE GRINDING</option>
+                    <option>SERRATION</option>
+                    <option>COUNTER BORE TURNING</option>
+                    <option>MILLING</option>
+                    <option>BROACHING</option>
+                    <option>OD GRINDING</option>
+                    <option>ID & OD</option>
+                    <option>BORING</option>
+                    <option>OD & ID MILLING</option>
+                    <option>DRILLING</option>
+                    <option>SPIGOT TURNING</option>
+                    <option>FACE TURNING</option>
+                    <option>WETCH PLUG</option>
+                    <option>SPIGOT GRINDING</option>
+                    <option>SHAVING</option>
+                    <option>PROFILE &amp; LEAD</option>
+                    <option>SURFACE BROACHING</option>
+                    <option>COUNTER BORE</option>
+                    <option>NIB MILLING</option>
+                    <option>OD TURNING</option>
+                    <option>ID TURNING</option>
+
+                </select>
+            </div>
+
+            <div>
+                <label>OE NAME</label>
+                <input name="oe_name" type="text" placeholder="Operator Name" />
+            </div>
+
+            <div>
+                <label>SHIFT</label>
+                <select name="shift">
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                </select>
+            </div>
+
+            <div>
+                <label>REMARKS</label>
+                <select name="remarks">
+                    <option>OK</option>
+                    <option>NOT OK</option>
+                </select>
+            </div>
+
+            <div>
+                <label>ACTIVITY</label>
+                <select name="activity">
+                    <option>1ST PIECE</option>
+                    <option>SETUP CHANGE</option>
+                    <option>TOOL CHANGE</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="btn-section">
+            <button class="btn" type="submit"
+                onclick="document.getElementById('actionField').value='in'">
+                IN-TIME
+            </button>
+
+            <button class="btn" type="button" style="background:#198754;"
+                onclick="window.location.reload()">
+                REFRESH
+            </button>
+
+            <button class="btn" type="submit" style="background:#dc3545;"
+                onclick="document.getElementById('actionField').value='out'">
+                OUT-TIME
+            </button>
+
+            <button class="btn" type="button" style="background:#6f42c1;"
+                    onclick="deleteSelectedRow()">
+                DELETE
+            </button>
+
+            <input type="hidden" id="selectedRowId" name="selectedRowId">
+        </div>
+    </form>
+
+    <div class="table-container">
+        <h3>Last 10 Entries</h3>
+
+        <table>
+            <tr>
+                <th>S.No</th>
+                <th>Date</th>
+                <th>Shift</th>
+                <th>Line</th>
+                <th>Machine</th>
+                <th>Part No</th>
+                <th>Operation</th>
+                <th>In Time</th>
+                <th>Out Time</th>
+                <th>OE Name</th>
+                <th>Remarks</th>
+                <th>Activity</th>
+                <th>PDF</th>
+            </tr>
+
+            {% for r in reports %}
+            <tr data-id="{{ r.id }}" class="{% if r.duration_hours %}{% if r.duration_hours <= 1 %}row-green{% elif r.duration_hours <= 2 %}row-yellow{% elif r.duration_hours <= 3 %}row-orange{% else %}row-normal{% endif %}{% else %}row-normal{% endif %}" onclick="markRowSelected(this)">
+
+                <td>{{ forloop.counter }}</td>
+                <td>{{ r.timestamp|date:"d-m-Y" }}</td>
+                <td>{{ r.shift }}</td>
+                <td>{{ r.line }}</td>
+                <td>{{ r.machine }}</td>
+                <td>{{ r.part_no }}</td>
+                <td>{{ r.operation }}</td>
+                <td>{{ r.in_time|time:"H:i:s" }}</td>
+                <td>{{ r.out_time|time:"H:i:s" }}</td>
+                <td>{{ r.oe_name }}</td>
+                <td>{{ r.remarks }}</td>
+                <td>{{ r.activity }}</td>
+                <td>
+                    <a href="{% static 'pdfs/sample2.pdf' %}"
+                       target="_blank"
+                       style="background:#8143e6; color:white; padding:6px 12px; border-radius:6px;">
+                       VIEW PDF
+                    </a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+<!-- EXIT MODAL -->
+<div id="exitModal" style="
+    display:none;
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.4);
+">
+    <div style="
+        width:350px; margin:12% auto; padding:20px;
+        background:white; border-radius:8px; text-align:center;
+    ">
+        <h3>Authentication Required</h3>
+
+        <form id="exitForm">
+            <input type="text" id="exitUser" placeholder="Username" required
+                style="width:90%; padding:8px; margin:10px;">
+            <input type="password" id="exitPass" placeholder="Password" required
+                style="width:90%; padding:8px; margin:10px;">
+
+            <button type="submit" style="
+                padding:10px 20px; background:#0d6efd; color:white; border:none;
+                border-radius:6px; cursor:pointer;
+            ">Verify</button>
+        </form>
+
+        <p id="exitError" style="color:red; display:none; margin-top:10px;">
+            Invalid credentials. Try again.
+        </p>
+    </div>
+</div>
+
+<script>
+// Row click – blue highlight
+function markRowSelected(row) {
+    document.querySelectorAll("table tr").forEach(r => r.classList.remove("row-selected"));
+    row.classList.add("row-selected");
+
+    document.getElementById("selectedRowId").value = row.getAttribute("data-id");
+}
+
+// Live date/time
+function updateDateTime() {
+    const now = new Date();
+    document.getElementById("time").innerHTML = now.toLocaleTimeString();
+    document.getElementById("date").innerHTML = now.toLocaleDateString();
+}
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+// EXIT logic (simple & reliable)
+let allowExit = false;
+
+// Show exit modal
+document.getElementById("exitBtn").onclick = function() {
+    document.getElementById("exitModal").style.display = "block";
+};
+
+// Validate exit form
+document.getElementById("exitForm").onsubmit = async function(e) {
+    e.preventDefault();
+
+    const username = document.getElementById("exitUser").value;
+    const password = document.getElementById("exitPass").value;
+
+    const response = await fetch("/verify-exit/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ username, password })
+    });
+
+    const result = await response.json();
+
+    if (result.status === "ok") {
+    allowExit = true;
+    document.getElementById("exitModal").style.display = "none";
+
+    // Try to close the tab
+    window.open('', '_self');
+    window.close();
+
+    // If browser blocks closing, fallback redirect
+    setTimeout(() => {
+        window.location.href = "/exit-page/";
+    }, 300);
+
+}
+    else {
+    document.getElementById("exitError").style.display = "block";
+}
+};
+
+
+// Optional: warn if user tries to close without EXIT
+window.onbeforeunload = function() {
+    if (!allowExit) {
+        return "Use the EXIT button to leave this page.";
+    }
+};
+
+function deleteSelectedRow() {
+    let id = document.getElementById("selectedRowId").value;
+
+    if (!id) {
+        alert("Please select a row to delete.");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to delete this entry?")) {
+        return;
+    }
+
+    fetch("/delete-row/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ id: id })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "ok") {
+            alert("Row deleted successfully!");
+            window.location.reload();
+        } else {
+            alert("Error deleting row!");
+        }
+    });
+}
+
+</script>
+
+</body>
+</html>
