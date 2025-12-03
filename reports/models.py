@@ -1,8 +1,5 @@
 from django.db import models
 
-# Create your models here.
-from djongo import models
-
 class CMMReport(models.Model):
     line = models.CharField(max_length=100)
     machine = models.CharField(max_length=100)
