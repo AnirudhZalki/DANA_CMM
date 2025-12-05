@@ -4,51 +4,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMM Auto Report Dashboard</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CMM Auto Report Dashboard | Dana Anand India</title>
 
     <style>
+        /* =========================================
+           1. CSS VARIABLES & RESET
+           ========================================= */
         :root {
             --primary-color: #0d6efd;
             --primary-hover: #0b5ed7;
-            --danger-color: #dc3545;
+            --secondary-color: #6c757d;
             --success-color: #198754;
-            --bg-color: #ecdc9c;
+            --danger-color: #dc3545;
+            --purple-color: #6f42c1;
+            --purple-hover: #59359a;
+
+            --bg-color: #f4f7f6;
             --card-bg: #ffffff;
-            --text-color: #333;
+            --text-color: #333333;
+            --text-light: #666666;
+
             --border-color: #dee2e6;
             --input-bg: #f8f9fa;
+            --focus-glow: rgba(13, 110, 253, 0.25);
+
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
             padding: 20px;
-            box-sizing: border-box;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Main Card Container */
+        /* =========================================
+           2. LAYOUT & CONTAINERS
+           ========================================= */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background: var(--card-bg);
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            position: relative;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Header Section */
+        /* Top Header Bar */
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            padding-bottom: 20px;
             border-bottom: 2px solid var(--border-color);
-            padding-bottom: 15px;
+            margin-bottom: 25px;
         }
 
+        /* Logo Area */
         .logo-section {
             display: flex;
             align-items: center;
@@ -56,237 +82,433 @@
         }
 
         .logo-section img {
-            height: 60px;
+            height: 65px;
             width: auto;
+            object-fit: contain;
+        }
+
+        .title-section {
+            display: flex;
+            flex-direction: column;
         }
 
         .title-section h2 {
             margin: 0;
             color: #2c3e50;
-            font-size: 24px;
-            font-weight: 700;
+            font-size: 26px;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .meta-info {
-            font-size: 14px;
-            color: #666;
-            font-weight: 500;
-            text-align: right;
-            background: #e9ecef;
-            padding: 8px 15px;
-            border-radius: 6px;
+        .title-section span {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 4px;
         }
 
-        /* Form Grid */
+        /* Header Actions (Exit & Time) */
+        .header-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .meta-info {
+            background-color: #e9ecef;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            color: #495057;
+            font-weight: 500;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+            border: 1px solid #dee2e6;
+        }
+
+        .meta-info span.time {
+            color: var(--primary-color);
+            font-weight: 800;
+            margin-left: 8px;
+        }
+
+        /* =========================================
+           3. FORM STYLING
+           ========================================= */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
-            background-color: #fff;
+            /* Auto-fit creates responsive columns */
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
-        label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 6px;
+        .form-group label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #6c757d;
+            margin-bottom: 8px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        input, select {
+        /* Input & Select fields */
+        .form-control {
             width: 100%;
-            padding: 10px 12px;
-            border-radius: 6px;
-            border: 1px solid #ced4da;
+            padding: 12px 15px;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #495057;
             background-color: var(--input-bg);
-            font-size: 14px;
-            transition: all 0.3s ease;
-            box-sizing: border-box; /* Fixes width issues */
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: var(--radius-md);
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            appearance: none; /* Removes default browser styles */
         }
 
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+        .form-control:focus {
             background-color: #fff;
+            border-color: var(--primary-color);
+            outline: 0;
+            box-shadow: 0 0 0 4px var(--focus-glow);
         }
 
-        /* Buttons */
+        /* Select Arrow Customization */
+        select.form-control {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px 12px;
+            padding-right: 2.5rem;
+        }
+
+        /* =========================================
+           4. FILE UPLOAD COMPONENT
+           ========================================= */
+        .file-upload-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            display: none; /* Hidden input */
+        }
+
+        .btn-browse {
+            background-color: #495057;
+            color: #fff;
+            border: none;
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-browse:hover {
+            background-color: #343a40;
+        }
+
+        .file-name-display {
+            flex-grow: 1;
+            background-color: var(--input-bg);
+            border: 1px solid #ced4da;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            color: var(--text-light);
+            font-style: italic;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* =========================================
+           5. BUTTONS
+           ========================================= */
         .btn-section {
-            margin-top: 30px;
             display: flex;
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
-            padding-top: 20px;
+            padding: 30px 0;
             border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            background-color: #fafafa; /* Slight distinctive background */
+            border-radius: var(--radius-md);
         }
 
         .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            user-select: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease-in-out;
+            border: 1px solid transparent;
+            cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            transition: transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            min-width: 140px;
         }
 
         .btn:active {
-            transform: translateY(1px);
-            box-shadow: none;
+            transform: scale(0.98);
         }
 
-        .btn-primary { background: var(--primary-color); color: white; }
-        .btn-primary:hover { background: var(--primary-hover); }
-
-        .btn-success { background: var(--success-color); color: white; }
-        .btn-success:hover { background: #146c43; }
-
-        .btn-danger { background: var(--danger-color); color: white; }
-        .btn-danger:hover { background: #bb2d3b; }
-
-        .btn-purple { background: #6f42c1; color: white; }
-        .btn-purple:hover { background: #59359a; }
-
-        /* Exit Button Special Styling */
-        .btn-exit {
-            background: var(--danger-color);
+        /* Button Variants */
+        .btn-primary {
+            background-color: var(--primary-color);
             color: white;
-            padding: 8px 20px;
-            font-size: 14px;
-            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            box-shadow: 0 6px 8px rgba(13, 110, 253, 0.3);
         }
 
-        /* Table Section */
-        .table-container {
-            margin-top: 30px;
-            border-radius: 8px;
-            overflow: hidden; /* For rounded corners */
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+            box-shadow: 0 4px 6px rgba(220, 53, 69, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: #bb2d3b;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+            box-shadow: 0 4px 6px rgba(25, 135, 84, 0.2);
+        }
+        .btn-success:hover {
+            background-color: #157347;
+        }
+
+        .btn-purple {
+            background-color: var(--purple-color);
+            color: white;
+            box-shadow: 0 4px 6px rgba(111, 66, 193, 0.2);
+        }
+        .btn-purple:hover {
+            background-color: var(--purple-hover);
+        }
+
+        .btn-exit {
+            padding: 8px 20px;
+            font-size: 13px;
+            border-radius: 6px;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-exit:hover {
+            background-color: #bb2d3b;
+        }
+
+        /* =========================================
+           6. DATA TABLE
+           ========================================= */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
         }
 
-        .table-container h3 {
-            background: #f1f3f5;
-            margin: 0;
+        .table-header-title {
+            background: #f8f9fa;
             padding: 15px 20px;
-            font-size: 18px;
             border-bottom: 1px solid var(--border-color);
-            color: #495057;
+        }
+        .table-header-title h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #343a40;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 14px;
+            background-color: white;
         }
 
-        table th {
-            background: #f8f9fa;
+        table thead th {
+            background-color: #f1f3f5;
             color: #495057;
             font-weight: 700;
-            padding: 12px;
+            padding: 14px 10px;
             text-align: center;
             border-bottom: 2px solid var(--border-color);
             white-space: nowrap;
+            text-transform: uppercase;
+            font-size: 12px;
         }
 
-        table td {
-            padding: 10px;
+        table tbody td {
+            padding: 12px 10px;
             text-align: center;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #e9ecef;
             vertical-align: middle;
+            color: #212529;
         }
 
-        /* Enhanced Row Coloring - Pastel colors for better readability */
-        /* Logic maintained, visuals updated */
+        /* Interactive Rows */
+        table tbody tr {
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+        table tbody tr:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+
+        /* Status Colors Logic (retained) */
         .row-green {
             background-color: #d1e7dd !important;
             color: #0f5132 !important;
-            border-left: 5px solid #198754;
+            border-left: 6px solid #198754;
         }
-
         .row-yellow {
             background-color: #fff3cd !important;
             color: #664d03 !important;
-            border-left: 5px solid #ffc107;
+            border-left: 6px solid #ffc107;
         }
-
         .row-orange {
             background-color: #ffe8cc !important;
             color: #994d05 !important;
-            border-left: 5px solid #fd7e14;
+            border-left: 6px solid #fd7e14;
         }
-
         .row-normal {
-            background-color: white !important;
-            color: black !important;
-            border-left: 5px solid transparent;
+            background-color: #ffffff !important;
+            border-left: 6px solid #ced4da;
         }
 
-        /* Selected row */
+        /* Active Selection Logic */
         .row-selected {
-            background-color: #cff4fc !important;
-            color: #055160 !important;
-            border-left: 5px solid #0dcaf0 !important;
-            font-weight: bold;
+            background-color: #e7f1ff !important;
+            border-left: 6px solid #0d6efd !important;
+            font-weight: 600;
         }
 
-        tr { cursor: pointer; }
-        tr:hover { filter: brightness(0.98); }
-
-        /* PDF Link Style */
-        .pdf-link {
-            background: #6610f2;
+        /* PDF Link Badge */
+        .badge-pdf {
+            display: inline-block;
+            background-color: var(--purple-color);
             color: white;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 4px;
             text-decoration: none;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            transition: opacity 0.2s;
         }
-        .pdf-link:hover { opacity: 0.9; }
+        .badge-pdf:hover {
+            opacity: 0.9;
+        }
 
-        /* Modal Styling */
+        /* =========================================
+           7. MODAL OVERLAY
+           ========================================= */
         #exitModal {
-            backdrop-filter: blur(2px);
-            z-index: 1000;
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease-out;
         }
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            padding: 30px;
-            width: 350px;
-            margin: 10% auto;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-        .modal-content input {
-            margin: 10px 0;
-        }
-        .modal-content h3 { margin-top: 0; color: #333; }
 
-        /* Responsive */
-        @media (max-width: 900px) {
-            .form-grid { grid-template-columns: 1fr 1fr; }
-            .top-bar { flex-direction: column; text-align: center; gap: 10px;}
-            .meta-info { width: 100%; text-align: center; box-sizing: border-box; }
+        .modal-dialog {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 100%;
+            max-width: 400px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
         }
-        @media (max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
+
+        .modal-dialog h3 {
+            margin-top: 0;
+            color: #212529;
+            margin-bottom: 10px;
+        }
+
+        .modal-dialog p {
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .modal-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* =========================================
+           8. RESPONSIVE QUERIES
+           ========================================= */
+        @media (max-width: 992px) {
+            .container { padding: 20px; }
+        }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            .header-actions {
+                align-items: center;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -295,434 +517,542 @@
 
 <div class="container">
 
-    <div class="top-bar">
+    <header class="top-bar">
         <div class="logo-section">
             <img src="{% static 'images/img.png' %}" alt="Dana Logo">
             <div class="title-section">
                 <h2>Dana Anand India Pvt Ltd</h2>
-                <span style="font-size: 14px; color: #777;">JODALLI PLANT • CMM REPORTING</span>
+                <span>JODALLI PLANT • CMM REPORTING SYSTEM</span>
             </div>
         </div>
 
-        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
-             <button id="exitBtn" class="btn btn-exit">
+        <div class="header-actions">
+            <button id="exitBtn" class="btn-exit">
                 EXIT APPLICATION
             </button>
             <div class="meta-info">
-                <span id="date"></span> <span style="margin: 0 5px;">|</span> <span id="time" style="font-weight:bold; color:var(--primary-color);"></span>
+                <span id="date">--/--/----</span>
+                <span style="margin: 0 6px; color:#ccc;">|</span>
+                <span id="time" class="time">--:--:--</span>
             </div>
         </div>
-    </div>
+    </header>
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data" id="mainForm">
         {% csrf_token %}
-        <input type="hidden" name="action" id="actionField" />
+        <input type="hidden" name="action" id="actionField" value="">
 
         <div class="form-grid">
 
             <div class="form-group">
-                <label>Line Selection</label>
-                <select name="line">
-                    <option>1410 SY</option>
-                    <option>909 SY</option>
-                    <option>ARGENTINA</option>
-                    <option>DIFF CASE</option>
-                    <option>DTA CF</option>
-                    <option>DTA SY</option>
-                    <option>END YOKE</option>
-                    <option>HDEY</option>
-                    <option>JAGUAR</option>
-                    <option>MERCEDES FY</option>
-                    <option>NISSAN/HINO</option>
-                    <option>SLEEVE MUFF</option>
-                    <option>TOYOTA FREY</option>
-                    <option>TUBE SHAFT</option>
-                    <option>TUBE YOKE</option>
-                    <option>TUNDRA FY</option>
-                    <option>TUNDRA SY</option>
-                    <option>UJ</option>
-                    <option>WATERFALL</option>
-                    <option>YOKE SHAFT</option>
-                    <option>YOKE SLEEVE</option>
+                <label for="line">Line Selection</label>
+                <select name="line" id="line" class="form-control" required>
+                    <option value="" disabled selected>-- Select Line --</option>
+                    <option value="1410 SY">1410 SY</option>
+                    <option value="909 SY">909 SY</option>
+                    <option value="ARGENTINA">ARGENTINA</option>
+                    <option value="DIFF CASE">DIFF CASE</option>
+                    <option value="DTA CF">DTA CF</option>
+                    <option value="DTA SY">DTA SY</option>
+                    <option value="END YOKE">END YOKE</option>
+                    <option value="HDEY">HDEY</option>
+                    <option value="JAGUAR">JAGUAR</option>
+                    <option value="MERCEDES FY">MERCEDES FY</option>
+                    <option value="NISSAN/HINO">NISSAN/HINO</option>
+                    <option value="SLEEVE MUFF">SLEEVE MUFF</option>
+                    <option value="TOYOTA FREY">TOYOTA FREY</option>
+                    <option value="TUBE SHAFT">TUBE SHAFT</option>
+                    <option value="TUBE YOKE">TUBE YOKE</option>
+                    <option value="TUNDRA FY">TUNDRA FY</option>
+                    <option value="TUNDRA SY">TUNDRA SY</option>
+                    <option value="UJ">UJ</option>
+                    <option value="WATERFALL">WATERFALL</option>
+                    <option value="YOKE SHAFT">YOKE SHAFT</option>
+                    <option value="YOKE SLEEVE">YOKE SLEEVE</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Machine Name</label>
-                <select name="machine">
-                    <option>CIN-1</option>
-                    <option>CIN-2</option>
-                    <option>MICROMATIC</option>
-                    <option>BOCCA-1</option>
-                    <option>BOCCA-2</option>
-                    <option>GCL 140</option>
-                    <option>SMT</option>
-                    <option>STD-3</option>
-                    <option>HPS</option>
-                    <option>ACE & JYOTHI</option>
-                    <option>J&J 36</option>
-                    <option>50TON</option>
-                    <option>JYOTI</option>
-                    <option>MAZAK</option>
-                    <option>J&J 66</option>
-                    <option>ACE</option>
-                    <option>MAZAK-1</option>
-                    <option>MAZAK-2</option>
-                    <option>MAZAK-3</option>
-                    <option>MAZAK-4</option>
-                    <option>MICROTECH</option>
-                    <option>ACE-2</option>
-                    <option>AMS HALL</option>
-                    <option>ODIN</option>
-                    <option>BEMCO</option>
-                    <option>BFW-1</option>
-                    <option>BFW-2</option>
-                    <option>BFW-3</option>
-                    <option>BFW-4</option>
-                    <option>ACE & AMS</option>
-                    <option>AMS VMC</option>
-                    <option>STD-1</option>
-                    <option>FY BFW</option>
-                    <option>TY BFW</option>
-                    <option>OLD BFW</option>
-                    <option>J&J 105</option>
-                    <option>J&J 73</option>
-                    <option>J&J 62</option>
-                    <option>J&J 63</option>
-                    <option>J&J 43</option>
-                    <option>J&J 55</option>
-                    <option>J&J 53</option>
-                    <option>PNR</option>
-                    <option>J&J 56</option>
-                    <option>AMS</option>
-                    <option>CLASSIC 1</option>
-                    <option>CLASSIC 2</option>
-                    <option>TOYOTA CLASSIC</option>
-                    <option>BFW</option>
-                    <option>J&J 57</option>
+                <label for="machine">Machine Name</label>
+                <select name="machine" id="machine" class="form-control" required>
+                    <option value="" disabled selected>-- Select Machine --</option>
 
-                    <option>12 TON</option>
-                    <option>J&J 72</option>
-                    <option>GROB-1</option>
-                    <option>GROB-2</option>
-                    <option>GROB-3</option>
-                    <option>AMS-1</option>
-                    <option>AMS-2</option>
-                    <option>AMS-3</option>
-                    <option>MAKINO</option>
-                    <option>PUMA</option>
-                    <option>SURFACE BROACH</option>
-                    <option>CHURCHIL</option>
-                    <option>16TON</option>
-                    <option>BURKE-2</option>
-                    <option>TOYOTA GRINDING</option>
-                    <option>AMS-4</option>
-                    <option>ROBODRILL</option>
-                    <option>ACER</option>
-                    <option>VSB-1</option>
-                    <option>VSB-2</option>
-                    <option>VSB-3</option>
-                    <option>BURKE-1</option>
-                    <option>MORRISON</option>
-                    <option>CG-1</option>
-                    <option>CG-2</option>
-                    <option>CG-4</option>
-                    <option>LMW-1</option>
-                    <option>LMW-2</option>
-                    <option>ACE TURNING</option>
-                    <option>MAZAK 250</option>
-                    <option>MAZAK 150</option>
-                    <option>MAZAK 5 AXIS</option>
+                    <optgroup label="Primary Machines">
+                        <option value="CIN-1">CIN-1</option>
+                        <option value="CIN-2">CIN-2</option>
+                        <option value="MICROMATIC">MICROMATIC</option>
+                        <option value="BOCCA-1">BOCCA-1</option>
+                        <option value="BOCCA-2">BOCCA-2</option>
+                        <option value="GCL 140">GCL 140</option>
+                        <option value="SMT">SMT</option>
+                        <option value="STD-3">STD-3</option>
+                        <option value="HPS">HPS</option>
+                        <option value="ACE & JYOTHI">ACE & JYOTHI</option>
+                        <option value="J&J 36">J&J 36</option>
+                        <option value="50TON">50TON</option>
+                        <option value="JYOTI">JYOTI</option>
+                        <option value="MAZAK">MAZAK</option>
+                        <option value="J&J 66">J&J 66</option>
+                        <option value="ACE">ACE</option>
+                        <option value="MAZAK-1">MAZAK-1</option>
+                        <option value="MAZAK-2">MAZAK-2</option>
+                        <option value="MAZAK-3">MAZAK-3</option>
+                        <option value="MAZAK-4">MAZAK-4</option>
+                        <option value="MICROTECH">MICROTECH</option>
+                        <option value="ACE-2">ACE-2</option>
+                        <option value="AMS HALL">AMS HALL</option>
+                        <option value="ODIN">ODIN</option>
+                        <option value="BEMCO">BEMCO</option>
+                        <option value="BFW-1">BFW-1</option>
+                        <option value="BFW-2">BFW-2</option>
+                        <option value="BFW-3">BFW-3</option>
+                        <option value="BFW-4">BFW-4</option>
+                    </optgroup>
+
+                    <optgroup label="Secondary Machines">
+                        <option value="ACE & AMS">ACE & AMS</option>
+                        <option value="AMS VMC">AMS VMC</option>
+                        <option value="STD-1">STD-1</option>
+                        <option value="FY BFW">FY BFW</option>
+                        <option value="TY BFW">TY BFW</option>
+                        <option value="OLD BFW">OLD BFW</option>
+                        <option value="J&J 105">J&J 105</option>
+                        <option value="J&J 73">J&J 73</option>
+                        <option value="J&J 62">J&J 62</option>
+                        <option value="J&J 63">J&J 63</option>
+                        <option value="J&J 43">J&J 43</option>
+                        <option value="J&J 55">J&J 55</option>
+                        <option value="J&J 53">J&J 53</option>
+                        <option value="PNR">PNR</option>
+                        <option value="J&J 56">J&J 56</option>
+                        <option value="AMS">AMS</option>
+                        <option value="CLASSIC 1">CLASSIC 1</option>
+                        <option value="CLASSIC 2">CLASSIC 2</option>
+                        <option value="TOYOTA CLASSIC">TOYOTA CLASSIC</option>
+                        <option value="BFW">BFW</option>
+                        <option value="J&J 57">J&J 57</option>
+                    </optgroup>
+
+                    <optgroup label="Additional Machines">
+                        <option value="12 TON">12 TON</option>
+                        <option value="J&J 72">J&J 72</option>
+                        <option value="GROB-1">GROB-1</option>
+                        <option value="GROB-2">GROB-2</option>
+                        <option value="GROB-3">GROB-3</option>
+                        <option value="AMS-1">AMS-1</option>
+                        <option value="AMS-2">AMS-2</option>
+                        <option value="AMS-3">AMS-3</option>
+                        <option value="MAKINO">MAKINO</option>
+                        <option value="PUMA">PUMA</option>
+                        <option value="SURFACE BROACH">SURFACE BROACH</option>
+                        <option value="CHURCHIL">CHURCHIL</option>
+                        <option value="16TON">16TON</option>
+                        <option value="BURKE-2">BURKE-2</option>
+                        <option value="TOYOTA GRINDING">TOYOTA GRINDING</option>
+                        <option value="AMS-4">AMS-4</option>
+                        <option value="ROBODRILL">ROBODRILL</option>
+                        <option value="ACER">ACER</option>
+                        <option value="VSB-1">VSB-1</option>
+                        <option value="VSB-2">VSB-2</option>
+                        <option value="VSB-3">VSB-3</option>
+                        <option value="BURKE-1">BURKE-1</option>
+                        <option value="MORRISON">MORRISON</option>
+                        <option value="CG-1">CG-1</option>
+                        <option value="CG-2">CG-2</option>
+                        <option value="CG-4">CG-4</option>
+                        <option value="LMW-1">LMW-1</option>
+                        <option value="LMW-2">LMW-2</option>
+                        <option value="ACE TURNING">ACE TURNING</option>
+                        <option value="MAZAK 250">MAZAK 250</option>
+                        <option value="MAZAK 150">MAZAK 150</option>
+                        <option value="MAZAK 5 AXIS">MAZAK 5 AXIS</option>
+                    </optgroup>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Part Number</label>
-                <input name="part_no" type="text" placeholder="Enter Part No" />
+                <label for="part_no">Part Number</label>
+                <input name="part_no" id="part_no" class="form-control" type="text" placeholder="e.g. 123-ABC-456" required />
             </div>
 
             <div class="form-group">
-                <label>Operation Type</label>
-                <select name="operation">
-                    <option>TURNING</option>
-                    <option>BORING & GROOVING</option>
-                    <option>OD & ID TURNING</option>
-                    <option>OD & FACE GRINDING</option>
-                    <option>SERRATION</option>
-                    <option>COUNTER BORE TURNING</option>
-                    <option>MILLING</option>
-                    <option>BROACHING</option>
-                    <option>OD GRINDING</option>
-                    <option>ID & OD</option>
-                    <option>BORING</option>
-                    <option>OD & ID MILLING</option>
-                    <option>DRILLING</option>
-                    <option>SPIGOT TURNING</option>
-                    <option>FACE TURNING</option>
-                    <option>WETCH PLUG</option>
-                    <option>SPIGOT GRINDING</option>
-                    <option>SHAVING</option>
-                    <option>PROFILE &amp; LEAD</option>
-                    <option>SURFACE BROACHING</option>
-                    <option>COUNTER BORE</option>
-                    <option>NIB MILLING</option>
-                    <option>OD TURNING</option>
-                    <option>ID TURNING</option>
+                <label for="operation">Operation Type</label>
+                <select name="operation" id="operation" class="form-control" required>
+                    <option value="" disabled selected>-- Select Operation --</option>
+                    <option value="TURNING">TURNING</option>
+                    <option value="BORING & GROOVING">BORING & GROOVING</option>
+                    <option value="OD & ID TURNING">OD & ID TURNING</option>
+                    <option value="OD & FACE GRINDING">OD & FACE GRINDING</option>
+                    <option value="SERRATION">SERRATION</option>
+                    <option value="COUNTER BORE TURNING">COUNTER BORE TURNING</option>
+                    <option value="MILLING">MILLING</option>
+                    <option value="BROACHING">BROACHING</option>
+                    <option value="OD GRINDING">OD GRINDING</option>
+                    <option value="ID & OD">ID & OD</option>
+                    <option value="BORING">BORING</option>
+                    <option value="OD & ID MILLING">OD & ID MILLING</option>
+                    <option value="DRILLING">DRILLING</option>
+                    <option value="SPIGOT TURNING">SPIGOT TURNING</option>
+                    <option value="FACE TURNING">FACE TURNING</option>
+                    <option value="WETCH PLUG">WETCH PLUG</option>
+                    <option value="SPIGOT GRINDING">SPIGOT GRINDING</option>
+                    <option value="SHAVING">SHAVING</option>
+                    <option value="PROFILE & LEAD">PROFILE & LEAD</option>
+                    <option value="SURFACE BROACHING">SURFACE BROACHING</option>
+                    <option value="COUNTER BORE">COUNTER BORE</option>
+                    <option value="NIB MILLING">NIB MILLING</option>
+                    <option value="OD TURNING">OD TURNING</option>
+                    <option value="ID TURNING">ID TURNING</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Operator Name (OE)</label>
-                <input name="oe_name" type="text" placeholder="Enter Name" />
+                <label for="oe_name">Operator Name (OE)</label>
+                <input name="oe_name" id="oe_name" class="form-control" type="text" placeholder="Enter Full Name" required />
             </div>
 
             <div class="form-group">
-                <label>Shift</label>
-                <select name="shift">
-                    <option>A</option>
-                    <option>B</option>
-                    <option>C</option>
+                <label for="shift">Shift</label>
+                <select name="shift" id="shift" class="form-control">
+                    <option value="A">Shift A (06:00 - 14:00)</option>
+                    <option value="B">Shift B (14:00 - 22:00)</option>
+                    <option value="C">Shift C (22:00 - 06:00)</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Quality / Remarks</label>
-                <select name="remarks" id="remarks">
-                    <option>OK</option>
-                    <option>NOT OK</option>
+                <label for="remarks">Quality Remarks</label>
+                <select name="remarks" id="remarks" class="form-control">
+                    <option value="OK">OK</option>
+                    <option value="NOT OK">NOT OK</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Activity</label>
-                <select name="activity">
-                    <option>1ST PIECE</option>
-                    <option>SETUP CHANGE</option>
-                    <option>TOOL CHANGE</option>
+                <label>Upload CMM Report (PDF)</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" name="pdf_file" id="pdfUpload" accept=".pdf" onchange="updateFileName(this)">
+
+                    <button type="button" class="btn-browse" onclick="document.getElementById('pdfUpload').click()">
+                        📂 Browse Files
+                    </button>
+
+                    <div class="file-name-display" id="fileName">
+                        No file chosen...
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="activity">Activity Type</label>
+                <select name="activity" id="activity" class="form-control">
+                    <option value="1ST PIECE">1ST PIECE INSPECTION</option>
+                    <option value="SETUP CHANGE">SETUP CHANGE</option>
+                    <option value="TOOL CHANGE">TOOL CHANGE</option>
                 </select>
             </div>
-        </div>
 
-        <div class="btn-section">
+        </div> <div class="btn-section">
             <button class="btn btn-primary" type="submit"
                 onclick="document.getElementById('actionField').value='in'; updateRemarks('in');">
-                ▶ IN-TIME
+                <span style="margin-right:8px;">▶</span> IN-TIME
             </button>
 
             <button class="btn btn-danger" type="submit"
                 onclick="document.getElementById('actionField').value='out'; updateRemarks('out');">
-                ■ OUT-TIME
+                <span style="margin-right:8px;">■</span> OUT-TIME
             </button>
 
-            <button class="btn btn-success" type="button"
-                onclick="window.location.reload()">
-                ↻ REFRESH
+            <button class="btn btn-success" type="button" onclick="window.location.reload()">
+                <span style="margin-right:8px;">↻</span> REFRESH
             </button>
 
-            <button class="btn btn-purple" type="button"
-                    onclick="deleteSelectedRow()">
-                ✖ DELETE SELECTED
+            <button class="btn btn-purple" type="button" onclick="deleteSelectedRow()">
+                <span style="margin-right:8px;">✖</span> DELETE SELECTED
             </button>
 
             <input type="hidden" id="selectedRowId" name="selectedRowId">
         </div>
     </form>
 
-    <div class="table-container">
-        <h3>Recent Entries (Last 10)</h3>
 
-        <div style="overflow-x: auto;">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Date</th>
-                        <th>Shift</th>
-                        <th>Line</th>
-                        <th>Machine</th>
-                        <th>Part No</th>
-                        <th>Operation</th>
-                        <th>In Time</th>
-                        <th>Out Time</th>
-                        <th>OE Name</th>
-                        <th>Remarks</th>
-                        <th>Activity</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for r in reports %}
-                    <tr data-id="{{ r.id }}" class="{% if r.duration_hours %}{% if r.duration_hours <= 1 %}row-green{% elif r.duration_hours <= 2 %}row-yellow{% elif r.duration_hours <= 3 %}row-orange{% else %}row-normal{% endif %}{% else %}row-normal{% endif %}" onclick="markRowSelected(this)">
-
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ r.timestamp|date:"d-m-Y" }}</td>
-                        <td>{{ r.shift }}</td>
-                        <td>{{ r.line }}</td>
-                        <td>{{ r.machine }}</td>
-                        <td>{{ r.part_no }}</td>
-                        <td>{{ r.operation }}</td>
-                        <td>{{ r.in_time|time:"H:i:s" }}</td>
-                        <td>{{ r.out_time|time:"H:i:s" }}</td>
-                        <td>{{ r.oe_name }}</td>
-                        <td>{{ r.remarks }}</td>
-                        <td>{{ r.activity }}</td>
-                        <td>
-                            <a href="{% static 'pdfs/sample3.pdf' %}"
-                               target="_blank"
-                               class="pdf-link">
-                               VIEW PDF
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="table-responsive">
+        <div class="table-header-title">
+            <h3>Recent Report Entries (Last 10)</h3>
         </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Date</th>
+                    <th>Shift</th>
+                    <th>Line</th>
+                    <th>Machine</th>
+                    <th>Part No</th>
+                    <th>Operation</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>OE Name</th>
+                    <th>Remarks</th>
+                    <th>Activity</th>
+                    <th>Report</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in reports %}
+                <tr data-id="{{ r.id }}"
+                    class="{% if r.duration_hours %}{% if r.duration_hours <= 1 %}row-green{% elif r.duration_hours <= 2 %}row-yellow{% elif r.duration_hours <= 3 %}row-orange{% else %}row-normal{% endif %}{% else %}row-normal{% endif %}"
+                    onclick="markRowSelected(this)">
+
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ r.timestamp|date:"d-m-Y" }}</td>
+                    <td>{{ r.shift }}</td>
+                    <td>{{ r.line }}</td>
+                    <td>{{ r.machine }}</td>
+                    <td>{{ r.part_no }}</td>
+                    <td>{{ r.operation }}</td>
+                    <td>{{ r.in_time|time:"H:i:s" }}</td>
+                    <td>{{ r.out_time|time:"H:i:s" }}</td>
+                    <td>{{ r.oe_name }}</td>
+                    <td>{{ r.remarks }}</td>
+                    <td>{{ r.activity }}</td>
+                    <td>
+                        {% if r.pdf_file %}
+                            <a href="{{ r.pdf_file.url }}" target="_blank" class="badge-pdf">
+                                VIEW PDF
+                            </a>
+                        {% else %}
+                            <span style="color:#ccc; font-size:11px;">No File</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="13" style="padding: 20px; color: #999;">
+                        No entries found for today.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
-</div>
-
-<div id="exitModal" style="
-    display:none;
-    position:fixed; top:0; left:0; width:100%; height:100%;
-    background:rgba(0,0,0,0.5);
-">
-    <div class="modal-content">
+</div> <div id="exitModal">
+    <div class="modal-dialog">
         <h3>Authentication Required</h3>
-        <p style="color:#666; margin-bottom:15px;">Please enter admin credentials to exit.</p>
+        <p>Enter supervisor credentials to close application.</p>
 
         <form id="exitForm">
-            <input type="text" id="exitUser" placeholder="Username" required>
-            <input type="password" id="exitPass" placeholder="Password" required>
+            <input type="text" id="exitUser" class="modal-input" placeholder="Username" required>
+            <input type="password" id="exitPass" class="modal-input" placeholder="Password" required>
 
-            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Verify & Exit</button>
-            <button type="button" class="btn" style="background:#ddd; color:#333; width:100%; margin-top:10px;" onclick="document.getElementById('exitModal').style.display='none'">Cancel</button>
+            <div class="modal-btn-group">
+                <button type="submit" class="btn btn-primary" style="width:100%;">Verify & Exit</button>
+                <button type="button" class="btn" style="background:#e9ecef; color:#333; width:100%;"
+                        onclick="document.getElementById('exitModal').style.display='none'">
+                    Cancel
+                </button>
+            </div>
         </form>
 
-        <p id="exitError" style="color:#dc3545; display:none; margin-top:10px; font-weight:bold;">
-            Invalid credentials. Try again.
+        <p id="exitError" style="color:var(--danger-color); display:none; margin-top:15px; font-weight:bold;">
+            Invalid credentials. Please try again.
         </p>
     </div>
 </div>
 
 <script>
-// Row click – blue highlight
-function markRowSelected(row) {
-    document.querySelectorAll("table tr").forEach(r => r.classList.remove("row-selected"));
-    row.classList.add("row-selected");
-
-    document.getElementById("selectedRowId").value = row.getAttribute("data-id");
-}
-
-// Live date/time
-function updateDateTime() {
-    const now = new Date();
-    document.getElementById("time").innerHTML = now.toLocaleTimeString();
-    document.getElementById("date").innerHTML = now.toLocaleDateString();
-}
-setInterval(updateDateTime, 1000);
-updateDateTime();
-
-// EXIT logic (simple & reliable)
-let allowExit = false;
-
-// Show exit modal
-document.getElementById("exitBtn").onclick = function() {
-    document.getElementById("exitModal").style.display = "block";
-};
-
-// Validate exit form
-document.getElementById("exitForm").onsubmit = async function(e) {
-    e.preventDefault();
-
-    const username = document.getElementById("exitUser").value;
-    const password = document.getElementById("exitPass").value;
-
-    const response = await fetch("/verify-exit/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": "{{ csrf_token }}"
-        },
-        body: JSON.stringify({ username, password })
-    });
-
-    const result = await response.json();
-
-    if (result.status === "ok") {
-        allowExit = true;
-        document.getElementById("exitModal").style.display = "none";
-
-        // Try to close the tab
-        window.open('', '_self');
-        window.close();
-
-        // If browser blocks closing, fallback redirect
-        setTimeout(() => {
-            window.location.href = "/exit-page/";
-        }, 300);
-    }
-    else {
-        document.getElementById("exitError").style.display = "block";
-    }
-};
-
-
-// Optional: warn if user tries to close without EXIT
-window.onbeforeunload = function() {
-    if (!allowExit) {
-        return "Use the EXIT button to leave this page.";
-    }
-};
-
-function deleteSelectedRow() {
-    let id = document.getElementById("selectedRowId").value;
-
-    if (!id) {
-        alert("Please select a row to delete.");
-        return;
-    }
-
-    if (!confirm("Are you sure you want to delete this entry?")) {
-        return;
-    }
-
-    fetch("/delete-row/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": "{{ csrf_token }}"
-        },
-        body: JSON.stringify({ id: id })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === "ok") {
-            alert("Row deleted successfully!");
-            window.location.reload();
+    /* ------------------------------------------------
+       1. FILE UPLOAD UX
+       Updates the text next to the browse button
+       ------------------------------------------------ */
+    function updateFileName(input) {
+        const display = document.getElementById('fileName');
+        if (input.files && input.files.length > 0) {
+            display.innerText = input.files[0].name;
+            display.style.color = "#333";
+            display.style.fontStyle = "normal";
         } else {
-            alert("Error deleting row!");
+            display.innerText = "No file chosen...";
+            display.style.color = "#666";
+            display.style.fontStyle = "italic";
         }
-    });
-}
-
-
-// Update remarks dropdown based on action
-function updateRemarks(action) {
-    const remarks = document.getElementById("remarks");
-
-    // Clear old options
-    remarks.innerHTML = "";
-
-    if (action === "in") {
-        // IN-TIME → only NOT OK
-        remarks.innerHTML += `<option value="NOT OK">NOT OK</option>`;
-    } else if (action === "out") {
-        // OUT-TIME → show OK and NOT OK
-        remarks.innerHTML += `<option value="OK">OK</option>`;
-        remarks.innerHTML += `<option value="NOT OK">NOT OK</option>`;
     }
-}
+
+    /* ------------------------------------------------
+       2. LIVE CLOCK
+       Updates Date and Time in the header every second
+       ------------------------------------------------ */
+    function updateDateTime() {
+        const now = new Date();
+        const dateOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+
+        document.getElementById("time").innerHTML = now.toLocaleTimeString();
+        document.getElementById("date").innerHTML = now.toLocaleDateString('en-GB', dateOptions);
+    }
+    // Initial call and interval
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    /* ------------------------------------------------
+       3. ROW SELECTION LOGIC
+       Highlights table row and captures ID for deletion
+       ------------------------------------------------ */
+    function markRowSelected(row) {
+        // Remove active class from all rows
+        document.querySelectorAll("table tbody tr").forEach(r => {
+            r.classList.remove("row-selected");
+        });
+
+        // Add active class to clicked row
+        row.classList.add("row-selected");
+
+        // Set hidden input value
+        const rowId = row.getAttribute("data-id");
+        document.getElementById("selectedRowId").value = rowId;
+    }
+
+    /* ------------------------------------------------
+       4. DELETE FUNCTIONALITY
+       Sends POST request to backend to remove entry
+       ------------------------------------------------ */
+    function deleteSelectedRow() {
+        let id = document.getElementById("selectedRowId").value;
+
+        if (!id) {
+            alert("Please select a row in the table first.");
+            return;
+        }
+
+        if (!confirm("Are you sure you want to PERMANENTLY delete this entry?")) {
+            return;
+        }
+
+        // Fetch API call
+        fetch("/delete-row/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}" // Django CSRF
+            },
+            body: JSON.stringify({ id: id })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "ok") {
+                alert("Entry deleted successfully.");
+                window.location.reload();
+            } else {
+                alert("Error deleting row: " + (data.message || "Unknown error"));
+            }
+        })
+        .catch(err => {
+            console.error("Error:", err);
+            alert("Network error occurred.");
+        });
+    }
+
+    /* ------------------------------------------------
+       5. DYNAMIC REMARKS LOGIC
+       Changes dropdown options based on IN/OUT button
+       ------------------------------------------------ */
+    function updateRemarks(action) {
+        const remarksSelect = document.getElementById("remarks");
+        remarksSelect.innerHTML = ""; // Clear current options
+
+        if (action === "in") {
+            // For In-Time, usually implies starting, so only NOT OK might be relevant
+            // or maybe just 'Pending'. Based on your logic:
+            const opt = document.createElement("option");
+            opt.value = "NOT OK";
+            opt.text = "NOT OK";
+            remarksSelect.add(opt);
+        }
+        else if (action === "out") {
+            // For Out-Time, job is done, can be OK or NOT OK
+            const opt1 = document.createElement("option");
+            opt1.value = "OK";
+            opt1.text = "OK";
+
+            const opt2 = document.createElement("option");
+            opt2.value = "NOT OK";
+            opt2.text = "NOT OK";
+
+            remarksSelect.add(opt1);
+            remarksSelect.add(opt2);
+        }
+    }
+
+    /* ------------------------------------------------
+       6. EXIT MODAL LOGIC
+       Handles the secure exit mechanism
+       ------------------------------------------------ */
+    let allowExit = false;
+    const modal = document.getElementById("exitModal");
+
+    // Open Modal
+    document.getElementById("exitBtn").onclick = function() {
+        modal.style.display = "block";
+    };
+
+    // Close Modal on Outside Click
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Handle Form Submit
+    document.getElementById("exitForm").onsubmit = async function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById("exitUser").value;
+        const password = document.getElementById("exitPass").value;
+        const errorMsg = document.getElementById("exitError");
+
+        try {
+            const response = await fetch("/verify-exit/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+
+            if (result.status === "ok") {
+                allowExit = true;
+                modal.style.display = "none";
+
+                // Attempt to close window
+                window.open('', '_self');
+                window.close();
+
+                // Fallback redirection
+                setTimeout(() => {
+                    window.location.href = "/exit-page/"; // Redirect if close fails
+                }, 300);
+            } else {
+                errorMsg.style.display = "block";
+                errorMsg.innerText = "Incorrect username or password.";
+            }
+        } catch (err) {
+            console.error(err);
+            errorMsg.style.display = "block";
+            errorMsg.innerText = "Server connection failed.";
+        }
+    };
+
+    // Prevent accidental closing
+    window.onbeforeunload = function() {
+        if (!allowExit) {
+            return "You must use the EXIT button to leave this application securely.";
+        }
+    };
+
 </script>
 
 </body>

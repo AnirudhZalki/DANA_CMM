@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Application Closed</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { color: #dc3545; }
+        p { color: #666; margin-bottom: 20px; }
+        button {
+            padding: 10px 20px;
+            background: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>⚠ Application Exited</h1>
+        <p>You have securely logged out of the CMM Dashboard.</p>
+        <p>You can now close this browser tab.</p>
+        <button onclick="window.close()">Close Tab</button>
+        <br><br>
+        <a href="/" style="color:#0d6efd; text-decoration:none; font-size:14px;">Return to Dashboard</a>
+    </div>
+</body>
+</html>

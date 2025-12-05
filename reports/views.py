@@ -1,5 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
 from django.utils import timezone
@@ -8,7 +8,6 @@ import json
 
 
 def dashboard(request):
-
     # ============================
     #  HANDLE POST (IN / OUT TIME)
     # ============================
@@ -23,6 +22,10 @@ def dashboard(request):
         shift = request.POST.get("shift")
         remarks = request.POST.get("remarks")
         activity = request.POST.get("activity")
+
+        # --- NEW: CAPTURE THE FILE ---
+        # "pdf_file" matches the name="..." in your HTML input
+        pdf_file = request.FILES.get("pdf_file")
 
         now = timezone.now()
 
@@ -40,6 +43,8 @@ def dashboard(request):
                 remarks=remarks,
                 activity=activity,
                 in_time=now,
+                # --- SAVE FILE HERE ---
+                pdf_file=pdf_file,
                 uploaded_from=request.META.get("REMOTE_ADDR", "UNKNOWN")
             )
 
@@ -61,9 +66,15 @@ def dashboard(request):
             )
 
             if record:
+                # Update existing record
                 record.out_time = now
                 record.remarks = remarks
                 record.activity = activity
+
+                # --- UPDATE FILE IF UPLOADED ---
+                if pdf_file:
+                    record.pdf_file = pdf_file
+
                 record.save()
 
             else:
@@ -78,6 +89,8 @@ def dashboard(request):
                     remarks=remarks,
                     activity=activity,
                     out_time=now,
+                    # --- SAVE FILE HERE ---
+                    pdf_file=pdf_file,
                     uploaded_from=request.META.get("REMOTE_ADDR", "UNKNOWN")
                 )
 
@@ -143,3 +156,8 @@ def delete_row(request):
             return JsonResponse({"status": "error"})
 
     return JsonResponse({"status": "invalid"})
+
+# views.py
+
+def exit_view(request):
+    return render(request, 'exit.html')

@@ -16,7 +16,9 @@ class CMMReport(models.Model):
 
     uploaded_from = models.CharField(max_length=100)
     timestamp = models.DateTimeField(auto_now_add=True)
+    pdf_file = models.FileField(upload_to='pdfs/', null=True, blank=True)
 
+def __str__(self):
     class Meta:
         verbose_name = "CMM Report"
         verbose_name_plural = "CMM Reports"
