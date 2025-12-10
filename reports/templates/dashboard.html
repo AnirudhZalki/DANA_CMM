@@ -527,9 +527,16 @@
         </div>
 
         <div class="header-actions">
-            <button id="exitBtn" class="btn-exit">
+            <button id="exitBtn" class="btn btn-danger">
                 EXIT APPLICATION
             </button>
+
+            <button type="button"
+                    class="btn btn-success"
+                    onclick="window.location.href='/history/'">
+                VIEW FULL HISTORY
+            </button>
+
             <div class="meta-info">
                 <span id="date">--/--/----</span>
                 <span style="margin: 0 6px; color:#ccc;">|</span>
@@ -714,9 +721,9 @@
             <div class="form-group">
                 <label for="shift">Shift</label>
                 <select name="shift" id="shift" class="form-control">
-                    <option value="A">Shift A (06:00 - 14:00)</option>
-                    <option value="B">Shift B (14:00 - 22:00)</option>
-                    <option value="C">Shift C (22:00 - 06:00)</option>
+                    <option value="A">Shift A </option>
+                    <option value="B">Shift B </option>
+                    <option value="C">Shift C </option>
                 </select>
             </div>
 

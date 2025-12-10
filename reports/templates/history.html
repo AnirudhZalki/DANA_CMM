@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CMM Report History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f18a;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-size: 13px;
+            text-align: center;
+        }
+        th {
+            background: #0d6efd;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        a {
+            color: #0d6efd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .top-actions {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .top-actions a {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>CMM Complete History – Dana Anand India Pvt Ltd</h2>
+
+<div class="top-actions">
+    <a href="/">⬅ Back to Dashboard</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th>Date</th>
+            <th>Shift</th>
+            <th>Line</th>
+            <th>Machine</th>
+            <th>Part No</th>
+            <th>Operation</th>
+            <th>In Time</th>
+            <th>Out Time</th>
+            <th>OE Name</th>
+            <th>Remarks</th>
+            <th>Activity</th>
+            <th>Report</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in reports %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ r.timestamp|date:"d-m-Y" }}</td>
+            <td>{{ r.shift }}</td>
+            <td>{{ r.line }}</td>
+            <td>{{ r.machine }}</td>
+            <td>{{ r.part_no }}</td>
+            <td>{{ r.operation }}</td>
+            <td>{{ r.in_time|time:"H:i:s" }}</td>
+            <td>{{ r.out_time|time:"H:i:s" }}</td>
+            <td>{{ r.oe_name }}</td>
+            <td>{{ r.remarks }}</td>
+            <td>{{ r.activity }}</td>
+            <td>
+                {% if r.pdf_file %}
+                    <a href="{{ r.pdf_file.url }}" target="_blank">View PDF</a>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="13">No records found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

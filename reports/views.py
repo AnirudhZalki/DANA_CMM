@@ -126,6 +126,12 @@ def dashboard(request):
     return render(request, "dashboard.html", {"reports": reports})
 
 
+def history(request):
+    reports = CMMReport.objects.order_by("-timestamp")
+    return render(request, "history.html", {"reports": reports})
+
+
+
 @csrf_exempt
 def verify_exit(request):
     if request.method == "POST":
