@@ -510,6 +510,60 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* =========================================
+           9. PDF VIEWER MODAL
+           ========================================= */
+        #pdfModal {
+            display: none;
+            position: fixed;
+            z-index: 2000; /* Higher than exit modal */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .pdf-container {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            margin: 2% auto;
+            background: #fff;
+            border-radius: var(--radius-md);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pdf-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #333;
+            color: #fff;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+        }
+
+        .pdf-close-btn {
+            background: #dc3545;
+            border: none;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #pdfFrame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+        }
     </style>
 </head>
 
@@ -825,9 +879,10 @@
                     <td>{{ r.activity }}</td>
                     <td>
                         {% if r.pdf_file %}
-                            <a href="{{ r.pdf_file.url }}" target="_blank" class="badge-pdf">
+                            <button type="button" class="badge-pdf" style="border:none; cursor:pointer;"
+                                    onclick="event.stopPropagation(); showPdf('{{ r.pdf_file.url }}')">
                                 VIEW PDF
-                            </a>
+                            </button>
                         {% else %}
                             <span style="color:#ccc; font-size:11px;">No File</span>
                         {% endif %}
@@ -865,6 +920,44 @@
         <p id="exitError" style="color:var(--danger-color); display:none; margin-top:15px; font-weight:bold;">
             Invalid credentials. Please try again.
         </p>
+    </div>
+</div>
+
+
+<div id="deleteModal" style="display:none;" class="modal-dialog-wrapper">
+    <div id="deleteModalOverlay"
+         style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1060; backdrop-filter:blur(4px);">
+
+        <div class="modal-dialog" style="margin-top: 10%;">
+            <h3 style="color:#dc3545;">Confirm Deletion</h3>
+            <p>Enter supervisor credentials to permanently delete this record.</p>
+
+            <form id="deleteForm">
+                <input type="text" id="delUser" class="modal-input" placeholder="Username" required>
+                <input type="password" id="delPass" class="modal-input" placeholder="Password" required>
+
+                <div class="modal-btn-group">
+                    <button type="submit" class="btn btn-purple" style="width:100%;">Verify & Delete</button>
+                    <button type="button" class="btn" style="background:#e9ecef; color:#333; width:100%;"
+                            onclick="closeDeleteModal()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+            <p id="deleteError" style="color:var(--danger-color); display:none; margin-top:15px; font-weight:bold;">
+                Invalid credentials.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div id="pdfModal">
+    <div class="pdf-container">
+        <div class="pdf-header">
+            <span style="font-weight:600;">CMM Report Viewer</span>
+            <button class="pdf-close-btn" onclick="closePdf()">CLOSE X</button>
+        </div>
+        <iframe id="pdfFrame" src=""></iframe>
     </div>
 </div>
 
@@ -957,6 +1050,93 @@
             console.error("Error:", err);
             alert("Network error occurred.");
         });
+    }
+
+const deleteModal = document.getElementById("deleteModal");
+    const deleteError = document.getElementById("deleteError");
+
+    // Triggered by the "Delete Selected" button on the main dashboard
+    function deleteSelectedRow() {
+        let id = document.getElementById("selectedRowId").value;
+        if (!id) {
+            alert("Please select a row in the table first.");
+            return;
+        }
+        // Open the Auth Modal instead of immediate fetch
+        document.getElementById("deleteForm").reset();
+        deleteError.style.display = "none";
+        deleteModal.style.display = "block";
+    }
+
+    function closeDeleteModal() {
+        deleteModal.style.display = "none";
+    }
+
+    // Handle Delete Auth Submission
+    document.getElementById("deleteForm").onsubmit = async function(e) {
+        e.preventDefault();
+
+        let id = document.getElementById("selectedRowId").value;
+        const username = document.getElementById("delUser").value;
+        const password = document.getElementById("delPass").value;
+
+        try {
+            const response = await fetch("/delete-row/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    id: id,
+                    username: username,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.status === "ok") {
+                alert("Entry deleted successfully.");
+                window.location.reload();
+            } else if (data.status === "auth_error") {
+                deleteError.innerText = "Incorrect Username or Password.";
+                deleteError.style.display = "block";
+            } else {
+                deleteError.innerText = data.message || "Error occurred.";
+                deleteError.style.display = "block";
+            }
+        } catch (err) {
+            console.error(err);
+            deleteError.innerText = "Network Error.";
+            deleteError.style.display = "block";
+        }
+    };
+
+    /* ------------------------------------------------
+       9. PDF POPUP LOGIC
+       ------------------------------------------------ */
+    function showPdf(url) {
+        const modal = document.getElementById("pdfModal");
+        const frame = document.getElementById("pdfFrame");
+
+        frame.src = url; // Set the PDF URL
+        modal.style.display = "block";
+    }
+
+    function closePdf() {
+        const modal = document.getElementById("pdfModal");
+        const frame = document.getElementById("pdfFrame");
+
+        modal.style.display = "none";
+        frame.src = ""; // Clear src to stop memory usage/playing
+    }
+
+    // Close PDF modal if clicking outside the container
+    document.getElementById("pdfModal").onclick = function(e) {
+        if(e.target === this) {
+            closePdf();
+        }
     }
 
     /* ------------------------------------------------

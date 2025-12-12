@@ -167,3 +167,34 @@ def delete_row(request):
 
 def exit_view(request):
     return render(request, 'exit.html')
+
+@csrf_exempt
+def delete_row(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            row_id = data.get("id")
+            username = data.get("username")
+            password = data.get("password")
+
+            # 1. Authenticate the user first
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                # 2. If valid, delete the record
+                try:
+                    report = CMMReport.objects.get(id=row_id)
+                    # Optional: delete the actual file from storage if needed
+                    # if report.pdf_file:
+                    #     report.pdf_file.delete()
+                    report.delete()
+                    return JsonResponse({"status": "ok"})
+                except CMMReport.DoesNotExist:
+                    return JsonResponse({"status": "error", "message": "Record not found"})
+            else:
+                return JsonResponse({"status": "auth_error", "message": "Invalid Credentials"})
+
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)})
+
+    return JsonResponse({"status": "invalid"})
